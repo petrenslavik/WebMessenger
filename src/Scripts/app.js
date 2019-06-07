@@ -1,6 +1,6 @@
-import Vue from '/src/Scripts/Libraries/vue.js';
-import VueRouter from '/src/Scripts/Libraries/vue-router.js';
-import App from '/src/Views/App.vue';
+import Vue from '/node_modules/vue/dist/vue.esm.browser';
+import VueRouter from '/node_modules/vue-router/dist/vue-router.esm.browser';
+import App from '@/src/Views/App.vue';
 
 Vue.use(VueRouter);
 const Foo = { template: '<div>foo</div>' };
