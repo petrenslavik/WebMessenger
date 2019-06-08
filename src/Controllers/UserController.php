@@ -3,21 +3,21 @@
 
 namespace Messenger\Controllers;
 use Messenger\Core;
-use Messenger\Database\BaseRepository;
-use Messenger\Database\Database;
-use Messenger\ViewModels\TestModel;
-use Messenger\ViewModels\UserViewModel;
+use Messenger\Database\Repositories\UserRepository;
+use Messenger\Models\User;
+use Messenger\ViewModels\UserRegisterViewModel;
 
 class UserController extends Core\BaseController
 {
-    public function Index(TestModel $model, int $someval, string $SecondName)
+    /** @var UserRepository $object */
+    protected $userRepository;
+
+    public function __construct()
     {
-        echo $model->Id;
-        echo $model->Name;
-        print_r($someval);
-        print_r($SecondName);
+        $this->userRepository = new UserRepository();
     }
-    public function Insert(UserViewModel $model)
+
+  /*  public function Insert(UserViewModel $model)
     {
         $rep = new BaseRepository("Users","Messenger\Models\User");
         $model->PasswordHash = password_hash($model->PasswordHash,PASSWORD_DEFAULT);
@@ -37,8 +37,30 @@ class UserController extends Core\BaseController
             echo "Wrong password";
         }
     }
-    public function Test()
+*/
+    public function Register(UserRegisterViewModel $model)
     {
-
+        if($model->validate()) {
+            echo "Data not Valid";
+            return;
+        }
+        $user = $this->userRepository->GetUserByEmail($model->Email);
+        if($user) {
+            echo "User with this email already registered";
+            return;
+        }
+        $user = $this->userRepository->GetUserByUsername($model->Email);
+        if($user) {
+            echo "User with this username already registered";
+            return;
+        }
+        $newUser = new User();
+        $newUser->FirstName = $model->FirstName;
+        $newUser->SecondName = $model->SecondName;
+        $newUser->Email = $model->Email;
+        $newUser->PasswordHash = password_hash($model->Password,PASSWORD_DEFAULT);
+        $newUser->Username= $model->Username;
+        $this->userRepository->Insert($newUser);
+        echo "Register successful";
     }
 }

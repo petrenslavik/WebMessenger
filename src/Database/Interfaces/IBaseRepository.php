@@ -1,6 +1,6 @@
 <?php
 
-namespace Messenger\Database;
+namespace Messenger\Database\Interfaces;
 
 interface IBaseRepository{
     public function GetById($id);

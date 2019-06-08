@@ -25,8 +25,10 @@ class Router
     {
         if ($_SERVER['REQUEST_METHOD'] === 'GET')
         {
+            $exist = is_file("../dist/js/app.7517b2db.js/");
+            echo $exist;
             ob_start();
-            include("Views/index.html");
+            include("../dist/index.html");
             $content = ob_get_contents();
             ob_end_clean();
             echo $content;

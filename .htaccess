@@ -1,3 +1,4 @@
 AddDefaultCharset utf-8
+Header set Access-Control-Allow-Origin 'http://localhost:8080/'
 FallbackResource /src/index.php
 

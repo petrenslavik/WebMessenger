@@ -1,8 +1,11 @@
 <?php
 
 
-namespace Messenger\Database;
+namespace Messenger\Database\Repositories;
+
 use PDO;
+use Messenger\Database\Interfaces\IBaseRepository;
+use Messenger\Database\Database;
 
 class BaseRepository implements IBaseRepository
 {
@@ -83,7 +86,7 @@ class BaseRepository implements IBaseRepository
         $setString = implode(",", $arr);
         $sql = "UPDATE {$this->_table} SET {$setString} WHERE Id = ?";
         echo $sql;
-        $st = $this->Connection->prepare($sql);
+        $st = $this->_pdo->prepare($sql);
         array_push($valuesList, $$entity->Id);
         $st->execute($valuesList);
     }
