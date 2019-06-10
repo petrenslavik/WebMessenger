@@ -42,6 +42,7 @@ class BaseRepository implements IBaseRepository
         $sql = "INSERT INTO {$this->_table} ({$fieldsString}) VALUES($paramsString)";
         $stmt = $this->_pdo->prepare($sql);
         $stmt->execute($valuesList);
+        $entity->Id = $this->_pdo->lastInsertId();
     }
 
     public function Delete($id)
@@ -85,9 +86,8 @@ class BaseRepository implements IBaseRepository
         }
         $setString = implode(",", $arr);
         $sql = "UPDATE {$this->_table} SET {$setString} WHERE Id = ?";
-        echo $sql;
         $st = $this->_pdo->prepare($sql);
-        array_push($valuesList, $$entity->Id);
+        array_push($valuesList, $entity->Id);
         $st->execute($valuesList);
     }
 }

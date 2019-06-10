@@ -8,7 +8,8 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="fn">First name</span>
                         </div>
-                        <input name="FirstName" type="text" required v-bind:class="[isValidFirstName? 'is-valid': 'is-invalid']"
+                        <input name="FirstName" type="text" required
+                               v-bind:class="[isValidFirstName? 'is-valid': 'is-invalid']"
                                class="form-control"
                                placeholder="Viacheslav"
                                aria-label="First Name"
@@ -21,7 +22,8 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="sn">Second name</span>
                         </div>
-                        <input name="SecondName" type="text" required :class="[isValidSecondName? 'is-valid': 'is-invalid']"
+                        <input name="SecondName" type="text" required
+                               :class="[isValidSecondName? 'is-valid': 'is-invalid']"
                                class="form-control" placeholder="Petrenko" aria-label="First Name"
                                aria-describedby="sn" v-model="secondName">
                         <div class="invalid-feedback">
@@ -44,12 +46,14 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="username">@</span>
                         </div>
-                        <input name="Username" type="text" class="form-control" :class="[isValidUsername? 'is-valid': 'is-invalid']"
+                        <input name="Username" type="text" class="form-control"
+                               :class="[isValidUsername? 'is-valid': 'is-invalid']"
                                placeholder="Username" aria-label="Username"
                                aria-describedby="username" v-model="username">
                     </div>
                     <div class="form-group">
-                        <input name="Password" required type="password" :class="[isValidPassword? 'is-valid': 'is-invalid']"
+                        <input name="Password" required type="password"
+                               :class="[isValidPassword? 'is-valid': 'is-invalid']"
                                class="form-control" placeholder="Password" v-model="password"
                                pattern=".{8,}">
                         <div class="invalid-feedback">
@@ -57,11 +61,18 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <input name="RepeatPassword" required type="password" :class="[isValidRepeatPassword? 'is-valid': 'is-invalid']"
+                        <input name="RepeatPassword" required type="password"
+                               :class="[isValidRepeatPassword? 'is-valid': 'is-invalid']"
                                class="form-control" placeholder="Repeat password"
                                v-model="repeatPassword">
                         <div class="invalid-feedback">
                             Passwords don't match.
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control is-invalid">
+                        <div class="invalid-feedback">
+                            {{errorMessage}}
                         </div>
                     </div>
                     <div class="row">
@@ -80,6 +91,7 @@
 
 <script>
     import lib from "@/Scripts/FetchLib";
+
     export default {
         name: "Register",
         data: function () {
@@ -90,6 +102,7 @@
                 username: null,
                 password: null,
                 repeatPassword: null,
+                errorMessage: null,
             }
         },
         computed: {
@@ -100,7 +113,7 @@
                 return !!this.secondName;
             },
             isValidUsername: function () {
-                return (!this.username) || (/^[a-zA-Z]+$/.test(this.username));
+                return (!this.username) || (/^[a-zA-Z0-9]+$/.test(this.username));
             },
             isValidPassword: function () {
                 return (!!this.password) && this.password.length > 7;
@@ -113,15 +126,30 @@
                 return (!!this.email) && re.test(this.email);
             }
         },
-        methods:{
-            register:function(event){
+        methods: {
+            register: function (event) {
                 var formData = new FormData(event.target);
-                console.log(formData);
-                lib.fetch('user/register',formData,)
+                lib.fetch('user/register', formData, this.successfulRequest);
             },
-            successfullRegister:function(){
-                console.log("You have benn registered");
-                router.push("/");
+            successfulRequest: function (data) {
+                if (data.code == 0) {
+                    this.unsuccessfulRegister(data);
+                } else {
+                    this.successfulRegister();
+                }
+            },
+            successfulRegister: function () {
+                this.errorMessage = null;
+                this.$router.push("/confirmRegister");
+            },
+            unsuccessfulRegister: function (data) {
+                let str = "";
+                for (let property in data) {
+                    if (data.hasOwnProperty(property) && property != "code") {
+                        str += data[property] +'\n';
+                    }
+                }
+                this.errorMessage = str;
             }
         }
 

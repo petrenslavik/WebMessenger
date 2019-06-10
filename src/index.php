@@ -8,6 +8,5 @@
         if (is_file($filePath))
             include($filePath);
     });
-
     $router = new Router();
     $router->Run();

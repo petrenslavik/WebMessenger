@@ -4,5 +4,5 @@ namespace Messenger\Models;
 
 class User
 {
-    public $Id, $FirstName, $SecondName, $Email, $PasswordHash, $Username;
+    public $Id, $FirstName, $SecondName, $Email, $PasswordHash, $Username, $Verified;
 }

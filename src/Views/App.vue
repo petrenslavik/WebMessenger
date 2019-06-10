@@ -13,5 +13,6 @@
 <style>
     #app{
         height: 100%;
+        background-color: #32CD32;
     }
 </style>

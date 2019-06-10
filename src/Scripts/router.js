@@ -18,10 +18,22 @@ export default new VueRouter({
           props:true,
         },
         {
+            name: "RegisterConfirmation",
+            path: "/confirmRegister",
+            component: () => import ("@/Views/Layout/RegisterConfirmation"),
+            props:true,
+        },
+        {
+            name: "EmailConfirm",
+            path: "/user/confirmEmail",
+            component: () => import ("@/Views/Layout/ConfirmEmail"),
+            props:true,
+        },
+        {
             name: "Error404",
             path: "*",
             component: () => import ("@/Views/Layout/Error404"),
-            props:true
+            props: true
         }
     ]
 });

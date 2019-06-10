@@ -12,13 +12,13 @@ class UserRegisterViewModel extends BaseViewModel
 
     public function validate():bool
     {
-        if (filter_var($this->Email, FILTER_VALIDATE_EMAIL))
+        if (!filter_var($this->Email, FILTER_VALIDATE_EMAIL))
             return false;
-        if (ctype_alnum($this->Username))
+        if (!ctype_alnum($this->Username))
             return false;
         if (strlen($this->Password) < 8)
             return false;
-        if($this->Password == $this->RepeatPassword)
+        if($this->Password != $this->RepeatPassword)
             return false;
         return true;
     }
