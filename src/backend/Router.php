@@ -23,7 +23,7 @@ class Router
 
     public function Run()
     {
-        echo session_start();
+        session_start();
         if ($_SERVER['REQUEST_METHOD'] === 'GET')
         {
             $exist = is_file("../dist/js/app.7517b2db.js/");

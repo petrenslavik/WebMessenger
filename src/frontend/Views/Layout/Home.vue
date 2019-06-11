@@ -9,7 +9,7 @@
 </template>
 
 <script>
-    import Button from "@/Views/Components/Button";
+    import Button from "@/frontend/Views/Components/Button";
 
     export default {
         name: "Home",

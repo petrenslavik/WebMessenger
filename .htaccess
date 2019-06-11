@@ -1,5 +1,5 @@
 AddDefaultCharset utf-8
 Header set Access-Control-Allow-Origin 'http://localhost:8080'
 Header set Access-Control-Allow-Credentials 'true'
-FallbackResource /src/index.php
+FallbackResource /src/backend/index.php
 

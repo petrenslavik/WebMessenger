@@ -2,13 +2,13 @@ module.exports = {
     chainWebpack: config => {
         config.plugin("html")
             .tap(args => {
-                    args[0].template = "src/public/index.html";
+                    args[0].template = "src/frontend/public/index.html";
                     return args;
             });
         config.entryPoints.delete('app');
 
         config.entry('app')
-            .add('./src/Scripts/app.js')
+            .add('./src/frontend/Scripts/app.js')
             .end();
         config.resolve.alias
             .set("Vue","node_modules/vue")

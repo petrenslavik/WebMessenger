@@ -3,7 +3,7 @@
 </template>
 
 <script>
-    import lib from "@/Scripts/FetchLib";
+    import lib from "@/frontend/Scripts/FetchLib";
     export default {
         name: "ConfirmEmail",
         created: function() {

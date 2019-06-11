@@ -90,7 +90,7 @@
 </template>
 
 <script>
-    import lib from "@/Scripts/FetchLib";
+    import lib from "@/frontend/Scripts/FetchLib";
 
     export default {
         name: "Register",
@@ -158,7 +158,6 @@
 
 <style scoped>
     .container {
-        background-color: #32CD32;
         display: flex;
         flex-direction: column;
         justify-content: center;

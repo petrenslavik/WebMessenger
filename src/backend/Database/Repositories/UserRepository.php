@@ -4,6 +4,7 @@
 namespace Messenger\Database\Repositories;
 
 use Messenger\Database\Interfaces\IUserRepository;
+use Messenger\Models\User;
 use PDO;
 
 class UserRepository extends BaseRepository implements IUserRepository
