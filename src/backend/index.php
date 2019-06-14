@@ -1,5 +1,6 @@
 <?php
     namespace Messenger;
+    use Messenger\Application\Router;
 
     spl_autoload_register(function ($class_name) {
         $parts = explode('\\',$class_name);

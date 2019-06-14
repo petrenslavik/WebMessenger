@@ -29,4 +29,11 @@ class UserRepository extends BaseRepository implements IUserRepository
         $stmt->setFetchMode(PDO::FETCH_CLASS,$this->_entityClass);
         return $stmt->fetch();
     }
+
+    public function SearchUsers($str)
+    {
+        $stmt = $this->_pdo->prepare("Select * from {$this->_table} where Username like :username or Email like :email");
+        $stmt->execute(array("username" => "%$str%","email"=>"%$str%"));
+        return $stmt->fetchAll(PDO::FETCH_CLASS,$this->_entityClass);
+    }
 }

@@ -7,15 +7,28 @@ export default {
             credentials: "include",
             body: body
         };
-        var prom = fetch(baseUrl+url, options)
-            .then(function (response) {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error('Network response was not ok.');
-            })
-            .then(callback)
-            .catch(error => console.error(error));
+        let prom;
+        if(callback) {
+            prom = fetch(baseUrl + url, options)
+                .then(function (response) {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Network response was not ok.');
+                })
+                .then(callback)
+                .catch(error => console.error(error));
+        }
+        else{
+            prom = fetch(baseUrl + url, options)
+                .then(function (response) {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Network response was not ok.');
+                })
+                .catch(error => console.error(error));
+        }
         return prom;
     }
 }

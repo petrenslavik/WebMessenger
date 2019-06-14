@@ -14,7 +14,7 @@ class UserRegisterViewModel extends BaseViewModel
     {
         if (!filter_var($this->Email, FILTER_VALIDATE_EMAIL))
             return false;
-        if (!ctype_alnum($this->Username))
+        if (!(isset($this->Username) || ctype_alnum($this->Username)))
             return false;
         if (strlen($this->Password) < 8)
             return false;

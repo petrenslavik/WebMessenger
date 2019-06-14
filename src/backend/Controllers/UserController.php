@@ -29,21 +29,23 @@ class UserController extends Core\BaseController
 
     public function Register(UserRegisterViewModel $model)
     {
-        $request = array();
-        $request['code'] = 0;
+        $response = array();
+        $response['code'] = 0;
         if (!($model->validate())) {
-            $request[] = "Data not Valid";
+            $response[] = "Data not Valid";
         }
         $user = $this->userRepository->GetUserByEmail($model->Email);
         if ($user) {
-            $request[] = "Email is already taken.";
+            $response[] = "Email is already taken.";
         }
-        $user = $this->userRepository->GetUserByUsername($model->Username);
-        if ($user) {
-            $request[] = "User with this username already registered";
+        if($model->Username) {
+            $user = $this->userRepository->GetUserByUsername($model->Username);
+            if ($user) {
+                $response[] = "User with this username already registered";
+            }
         }
-        if (count($request) > 1) {
-            echo json_encode($request);
+        if (count($response) > 1) {
+            echo json_encode($response);
             return;
         }
         $newUser = new User();
@@ -54,16 +56,16 @@ class UserController extends Core\BaseController
         $newUser->Username = $model->Username;
         $newUser->Verified = false;
         $this->userRepository->Insert($newUser);
-        $request['code'] = 1;
-        $request[] = "Register successful";
-        echo json_encode($request);
+        $response['code'] = 1;
+        $response[] = "Register successful";
+        echo json_encode($response);
 
         $token = new EmailToken();
         $token->User = $newUser->Id;
         $token->Token = hash("sha256", $newUser->Email . "saltySalt");
         $this->emailTokenRepository->Insert($token);
         $subject = 'Email Confirmation';
-        $message = "Confirmation url: <a href = \"{$_SERVER['HTTP_HOST']}/user/confirmEmail/?token={$token->Token} \">Confirm</a>";
+        $message = "Confirmation url: <a href = \"{$_SERVER['HTTP_HOST']}/confirmEmail/?token={$token->Token} \">Confirm</a>";
         $headers = 'From: noreply@example.com' . "\r\n" .
             'X-Mailer: PHP/' . phpversion() . "\r\nContent-Type: text/html; charset=ISO-8859-1\r\n";
 
@@ -86,37 +88,74 @@ class UserController extends Core\BaseController
 
     public function Login(UserLoginViewModel $model)
     {
-        $request = array();
-        $request['code'] = 0;
+        $response = array();
+        $response['code'] = 0;
         if (!($model->validate())) {
-            $request[] = "Data not valid.";
+            $response[] = "Data not valid.";
         }
 
         $user = $this->userRepository->GetUserByEmail($model->Email);
         if (!$user) {
-            $request[] = "Wrong credentials.";
-            echo json_encode($request);
+            $response[] = "Wrong credentials.";
+            echo json_encode($response);
             return;
         }
 
         if ($user->Verified == false) {
             var_dump($user);
-            $request[] = "Confirm your email.";
-            echo json_encode($request);
+            $response[] = "Confirm your email.";
+            echo json_encode($response);
             return;
         }
 
         if (!password_verify($model->Password,$user->PasswordHash))
         {
-            $request[] = "Wrong credentials.";
-            echo json_encode($request);
+            $response[] = "Wrong credentials.";
+            echo json_encode($response);
             return;
         }
 
         $_SESSION["User"] = $user;
 
-        $request['code'] = 1;
-        $request[] = "Login successful";
-        echo json_encode($request);
+        $response['code'] = 1;
+        $response[] = "Login successful";
+        echo json_encode($response);
+    }
+
+    public function FindUsers(string $searchString)
+    {
+        $response = array();
+        $response['code'] = 0;
+        $currentUser = $_SESSION["User"];
+
+        if (!$currentUser) {
+            $response[] = "User not Unauthorized";
+            echo json_encode($response);
+            return;
+        }
+
+        $users = $this->userRepository->SearchUsers($searchString);
+        foreach ($users as $user)
+        {
+            unset($user->PasswordHash);
+            unset($user->Verified);
+        }
+
+        $response['code'] = 1;
+        $response[] = $users;
+        echo json_encode($response);
+    }
+
+    public function GetCurrent()
+    {
+        $currentUser = $_SESSION["User"];
+
+        if (!$currentUser) {
+            $response[] = "User not Unauthorized";
+            echo json_encode($response);
+            return;
+        }
+
+        echo json_encode($currentUser);
     }
 }

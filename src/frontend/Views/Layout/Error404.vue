@@ -3,6 +3,9 @@
         <div class="card border-danger mb-3 rounded">
             <div class="card-body">
                 <div>404, Requested page not found.</div>
+                <div>
+                    
+                </div>
             </div>
         </div>
     </div>

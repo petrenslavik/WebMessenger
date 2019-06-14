@@ -1,15 +1,20 @@
 <template>
-    <div class="conversation">
+    <div class="conversation" @click="clicked">
         <div class="info">
             <div class="name">
-                {{FirstName}} {{SecondName}}
+                {{data.Speaker.FirstName}} {{data.Speaker.SecondName}}
             </div>
             <div class="lastMessage">
-                {{LastMessage}}
+                {{data.LastMessage.Content.Text}}
             </div>
         </div>
-        <div class="date">
-            {{SendDate}}
+        <div class="rigthInfo">
+            <div class="date">
+                {{data.LastMessage.SendDateTime}}
+            </div>
+            <div class="UnreadMessages" v-if="data.NewMessages>0">
+                {{data.NewMessages}}
+            </div>
         </div>
     </div>
 </template>
@@ -17,48 +22,70 @@
 <script>
     export default {
         name: "Conversation",
-        data: function(){
-            return{
-                conversationId:null,
-                FirstName: null,
-                SecondName: null,
-                LastMessage: null,
-                SendDate: null
-            }
-        },
-        props:{
+        props: {
             data: Object,
+        },
+        methods: {
+            clicked: function (event) {
+                this.$emit('setConversation', this.data, event.currentTarget);
+            }
         }
     }
 </script>
 
 <style scoped>
-    .conversation{
+    .conversation {
         display: flex;
         flex-direction: row;
         padding: 5px;
         font-size: .85em;
         cursor: pointer;
     }
-    .info{
+
+    .info {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         flex-grow: 1;
     }
-    .date{
+
+    .date {
         text-align: right;
     }
-    .name{
-        font-weight:700;
-        word-wrap:break-word;
+
+    .name {
+        font-weight: 700;
+        word-wrap: break-word;
         white-space: nowrap;
     }
-    .lastMessage{
+
+    .lastMessage {
         color: #698192;
         white-space: nowrap;
     }
-    .conversation:hover{
+
+    .conversation:hover {
         background-color: #fae2e5;
+    }
+
+    .active {
+        background-color: #dc3545 !important;
+        color: white;
+    }
+
+    .active .lastMessage {
+        color: #fae2e5;
+    }
+    .rigthInfo{
+        display: flex;
+        flex-direction: column;
+    }
+    .UnreadMessages{
+        background-color: orange;
+        color:black;
+        border-radius:50%;
+        width:20px;
+        align-self:end;
+        text-align: center;
     }
 </style>

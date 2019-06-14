@@ -26,7 +26,7 @@ export default new VueRouter({
         },
         {
             name: "EmailConfirm",
-            path: "/user/confirmEmail",
+            path: "/confirmEmail",
             component: () => import ("@/frontend/Views/Layout/ConfirmEmail"),
             props: true,
         },

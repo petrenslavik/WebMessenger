@@ -1,6 +1,6 @@
 <?php
 
-namespace Messenger;
+namespace Messenger\Application;
 
 use Exception;
 use Messenger\Core\ModelBinder;

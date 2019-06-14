@@ -1,10 +1,7 @@
 <?php
 
 
-namespace Messenger\backend\Database\Interfaces;
-
-
-use Messenger\Database\Interfaces\IBaseRepository;
+namespace Messenger\Database\Interfaces;
 
 interface IConversationRepository extends IBaseRepository
 {
